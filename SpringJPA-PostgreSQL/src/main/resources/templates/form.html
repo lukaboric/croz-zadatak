@@ -1,0 +1,50 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<style>
+		table, th, td {
+    	border: 1px solid black;
+    	border-collapse: collapse;
+		}
+		th, td {
+	    	padding: 5px;
+	    	text-align: left;    
+		}
+	</style>
+    <title>Form</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+	<p></p>  		
+  	
+	<h1>New joke</h1>
+	
+    <form action="#" th:action="@{/new}" th:object="${empty_joke}" method="POST">
+    	<table>
+	    	<tr>
+	    		<td>Category:</td>
+		    	<td>
+			    	<select th:field="*{category}">
+			    		<option style="display:none" value=""></option>
+				    	<th:block th:each="category : ${categories}">
+				  			<option th:value="${category.id}" th:text="${category.name}"></option>
+				  		</th:block>	  		
+					</select>
+				</td>
+				<td th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Age Error</td>
+			</tr>
+		
+			<tr>
+	            <td>Content:</td>
+	            <td><input type="text" th:field="*{content}" /></td>
+	            <td th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Age Error</td>
+            </tr>
+        </table>
+        
+        <p><input type="submit" value="Submit" /> <input type="reset" value="Reset" /></p> 
+         
+    </form>	
+    
+</body>
+</html>

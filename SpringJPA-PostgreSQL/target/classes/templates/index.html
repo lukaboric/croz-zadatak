@@ -1,0 +1,118 @@
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
+<head>
+<!-- CSS INCLUDE -->
+<link rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous"></link>
+<!-- EOF CSS INCLUDE -->
+<style>
+.pagination-centered {
+    text-align: center;
+}
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+.pointer-disabled {
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+     <div class="container-fluid">	
+		<p></p>
+		<div class="row">
+			<form ACTION="#" th:action="@{/}" th:object="${update_joke}" method="POST">  	
+			
+			  	<table style="width:100%">
+			  		<tr>
+			    		<th>Joke_Id</th>
+			    		<th>Category</th>
+			    		<th>Content</th>
+			    		<th>Likes</th>
+			    		<th>Dislikes</th>
+			    		<th>Likes - Dislikes</th>
+			  		</tr>
+			  		<th:block th:each="joke : ${jokes}">
+			  			<tr>
+				    			<td th:text="${joke.id}"></td>
+				    			<td th:text="${joke.category.toString()}"></td>
+				    			<td th:text="${joke.content}"></td>
+				    			<td th:text="${joke.likes}"></td>
+				    			<td th:text="${joke.dislikes}"></td>
+				    			<td th:text="${joke.subtract}"></td>
+				    			<td>														
+									<button type="submit" th:formaction="@{/jokes/}+${joke.id}+@{/like}" formmethod="post">Like</button>			
+								</td>
+								<td>														
+									<button type="submit" th:formaction="@{/jokes/}+${joke.id}+@{/dislike}" formmethod="post">Dislike</button>			
+								</td>
+			  			</tr>
+			  		</th:block>
+				</table>
+			</form>
+	
+				<div class="row">
+	                
+	                
+	                <div th:if="${jokes.totalPages != 1}"
+	                    class="form-group col-md-11 pagination-centered">
+	                    
+	                    <ul class="pagination">
+	                    
+	                        <li th:class="${jokes.number == 0} ? disabled"><a
+	                            class="pageLink"
+	                            th:href="@{/(pageSize=${selectedPageSize}, page=1)}">«</a>
+	                        </li>
+	                        
+	                        <li th:class="${jokes.number == 0} ? disabled"><a
+	                            class="pageLink"
+	                            th:href="@{/(pageSize=${selectedPageSize}, page=${jokes.number})}">←</a>
+	                        </li>
+	                        
+	                        <li
+	                            th:class="${jokes.number == (page - 1)} ? 'active pointer-disabled'"
+	                            th:each="page : ${#numbers.sequence(pager.startPage, pager.endPage)}">
+	                            <a class="pageLink"
+	                            th:href="@{/(pageSize=${selectedPageSize}, page=${page})}"
+	                            th:text="${page}"></a>
+	                        </li>
+	                        
+	                        <li
+	                            th:class="${jokes.number + 1 == jokes.totalPages} ? disabled">
+	                            <a class="pageLink"
+	                            th:href="@{/(pageSize=${selectedPageSize}, page=${jokes.number + 2})}">→</a>
+	                        </li>
+	                        
+	                        <li
+	                            th:class="${jokes.number + 1 == jokes.totalPages} ? disabled">
+	                            <a class="pageLink"
+	                            th:href="@{/(pageSize=${selectedPageSize}, page=${jokes.totalPages})}">»</a>
+	                        </li>
+	                    </ul>
+	                </div>                
+	            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js" integrity="sha256-VAvG3sHdS5LqTT+5A/aeq/bZGa/Uj04xKxY8KM/w9EE=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        $(document).ready(function() {
+    	changePageAndSize();
+		});
+		function changePageAndSize() {
+		    $('#pageSizeSelect').change(function(evt) {
+		        window.location.replace("/?pageSize=" + this.value + "&page=1");
+		    });
+		}
+        /*]]>*/
+    </script>
+		
+</body>
+</html>
